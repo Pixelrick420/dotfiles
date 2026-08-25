@@ -1,8 +1,3 @@
-// Check the wiki for a full description of the configuration:
-//   https://yalter.github.io/niri/Configuration:-Introduction
-// ----------------------------------------------------------------------------
-// Launch at startup
-// ----------------------------------------------------------------------------
 spawn-at-startup "swayidle" "-w" 
 spawn-at-startup "dfr-theme-set-bg" "--keep-current"
 spawn-at-startup "mako"
@@ -11,54 +6,35 @@ spawn-at-startup "walker" "--gapplication-service"
 spawn-at-startup "mpd"
 spawn-sh-at-startup "sleep 1; exec mpd-mpris"
 spawn-at-startup "dfr-first-boot"
-// ----------------------------------------------------------------------------
-// Input devices (mouse, trackpad, keyboard, etc.)
-// ----------------------------------------------------------------------------
 input {
     keyboard {
         xkb {
-            // Swap caps lock and escape.
-            // Remap menu key to act as an extra super / mod key.
             options "altwin:menu_win"
         }
-        // A fairly fast repeat rate and delay.
         repeat-delay 200
         repeat-rate 40
     }
     touchpad {
-        // Tapping anywhere registers a left click.
         tap
-        // Inverted scrolling.
         natural-scroll
-        // Disable acceleration.
         accel-profile "flat"
     }
     mouse {
-        // Disable acceleration.
         accel-profile "flat"
-        // Faster scrolling with the mouse wheel.
         scroll-factor 2.0
     }
 }
-// ----------------------------------------------------------------------------
-// Behaviors and aesthetics
-// ----------------------------------------------------------------------------
-// Avoid writing screenshots to disk since they get piped into satty.
 screenshot-path null
 hotkey-overlay {
-    // Avoid auto-showing the important hotkeys menu.
     skip-at-startup
 }
 gestures {
-    // Disable overview when mousing over the top left of primary screen.
     hot-corners {
         off
     }
 }
-// Remove window decorations (requires opening and closing each app to change).
 prefer-no-csd
 layout {
-    // Set gaps around windows in logical pixels.
     gaps 8
     default-column-width {
         proportion 0.5
@@ -72,9 +48,6 @@ layout {
         width 1
     }
 }
-// ----------------------------------------------------------------------------
-// Window / layer rules
-// ----------------------------------------------------------------------------
 window-rule {
     match app-id="dev.zed.Zed"
 
@@ -82,7 +55,6 @@ window-rule {
     geometry-corner-radius 2
     clip-to-geometry true
 }
-// Assorted window rules.
 window-rule {
     match app-id="^Pinentry-gtk$"
     match app-id="^Tk$"
@@ -117,11 +89,7 @@ window-rule {
     match app-id="^KeePassXC$"
     block-out-from "screencast"
 }
-// ----------------------------------------------------------------------------
-// Key binds
-// ----------------------------------------------------------------------------
 binds {
-    // Overview.
     Mod+Grave hotkey-overlay-title="Kitty terminal" {
         spawn "~/.local/bin/kitty-focus"
     }
@@ -137,9 +105,8 @@ binds {
     Mod+O repeat=false hotkey-overlay-title="Toggle overview (4-finger swipe)" {
         toggle-overview
     }
-    // System.
     Mod+Alt+L hotkey-overlay-title="Lock screen" {
-        spawn "swaylock"
+        spawn "swaylock-plugin" "--command" "$HOME/.config/wlogout/lock-bg.sh"
     }
     Mod+Shift+Alt+L hotkey-overlay-title="Power off monitors" {
         power-off-monitors
@@ -147,7 +114,6 @@ binds {
     Mod+Ctrl+Shift+Q hotkey-overlay-title="Exit niri session" {
         quit
     }
-    // Capture.
     Mod+S hotkey-overlay-title="Screenshot (region)" {
         screenshot
     }
@@ -166,7 +132,6 @@ binds {
     Mod+E hotkey-overlay-title="Cast focused window" {
         spawn-sh "niri msg action set-dynamic-cast-window --id $(niri msg --json focused-window | jq .id)"
     }
-    // Notifications.
     Mod+N hotkey-overlay-title="Show last notification" {
         spawn "makoctl" "restore"
     }
@@ -179,7 +144,6 @@ binds {
     Mod+Ctrl+Shift+N hotkey-overlay-title="Toggle silencing notifications" {
         spawn "dfr-toggle-notifications"
     }
-    // Themes.
     Mod+BackSlash hotkey-overlay-title="Cycle theme's wallpapers" {
         spawn "dfr-theme-set-bg"
     }
@@ -192,7 +156,6 @@ binds {
     Mod+Ctrl+Shift+BackSlash hotkey-overlay-title="Pick theme" {
         spawn "dfr-theme-set" "--menu"
     }
-    // Media keys.
     XF86AudioRaiseVolume allow-when-locked=true hotkey-overlay-title="Raise volume" {
         spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"
     }
@@ -238,7 +201,6 @@ binds {
     XF86Calculator repeat=false hotkey-overlay-title="Calculator" {
         spawn "gnome-calculator"
     }
-    // Launcher.
     Mod+Space {
         spawn "fuzzel"
     }
@@ -248,7 +210,6 @@ binds {
     Mod+V repeat=false hotkey-overlay-title="Launcher (clipboard)" {
         spawn "walker" "--provider" "clipboard"
     }
-    // Apps.
     Mod+Alt+H hotkey-overlay-title="System health" {
         spawn "dfr-launch-or-focus-tui" "monitor"
     }
@@ -288,7 +249,6 @@ binds {
     Mod+Alt+Ctrl+Shift+B hotkey-overlay-title="Browser (isolated profile)" {
         spawn-sh "firefox -P ${BROWSER_ISOLATED_PROFILE:-isolated}"
     }
-    // Display scaling / zoom.
     Mod+Ctrl+Shift+Equal hotkey-overlay-title="Increase focused monitor scale" {
         spawn "output-scale" "+"
     }
@@ -325,7 +285,6 @@ binds {
     Mod+BracketRight hotkey-overlay-title="Move focused window in and out of column to the right" {
         consume-or-expel-window-right
     }
-    // Window and column sizes.
     Mod+F hotkey-overlay-title="Maximize column" {
         maximize-column
     }
@@ -356,7 +315,6 @@ binds {
     Mod+Shift+Minus hotkey-overlay-title="Decrease window height" {
         set-window-height "-10%"
     }
-    // Window and column movement.
     Mod+I hotkey-overlay-title="Focus previously focused window" {
         focus-window-previous
     }
@@ -456,7 +414,6 @@ binds {
     Mod+Ctrl+WheelScrollLeft hotkey-overlay-title="Move column left" {
         move-column-left
     }
-    // Multiple monitor window and column movement.
     Mod+Ctrl+Shift+Left hotkey-overlay-title="Move column to left monitor" {
         move-column-to-monitor-left
     }
@@ -493,7 +450,6 @@ binds {
     Mod+Ctrl+Shift+MouseForward hotkey-overlay-title="Move column to right monitor" {
         move-column-to-monitor-right
     }
-    // Workspaces.
     Mod+Shift+WheelScrollDown cooldown-ms=150 hotkey-overlay-title="Focus next workspace" {
         focus-workspace-down
     }
@@ -623,14 +579,6 @@ binds {
     Mod+Ctrl+9 {
         move-column-to-workspace 9
     }
-    // Apps such as remote-desktop clients and software KVM switches may request
-    // that niri stops processing the keyboard shortcuts defined here so they
-    // may, for example, forward the key presses as-is to a remote machine.
-    // It's a good idea to bind an escape hatch to toggle the inhibitor, so a
-    // buggy application can't hold your session hostage.
-    //
-    // allow-inhibiting=false can be applied to other binds as well, which
-    // ensures niri always processes them, even when an inhibitor is active.
     Mod+Escape allow-inhibiting=false hotkey-overlay-title="Always process even with inhibitor" {
         toggle-keyboard-shortcuts-inhibit
     }

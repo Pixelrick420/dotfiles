@@ -1,10 +1,10 @@
 # dotfiles
 
-My Wayland (Niri) dotfiles with Catppuccin Mocha theme.
+My Wayland (Niri) dotfiles.
 
 ## What's included
 
-- **swaylock** — Lock screen config with Catppuccin colors
+- **swaylock** — Lock screen config
 - **wlogout** — Logout menu with animated GLSL lock screen background
 - **niri** — Window manager config with DMS theme
 - **fastfetch** — System info display
@@ -53,16 +53,13 @@ Without this, shaders default to GLSL 1.10 which doesn't support bitwise operati
 ## Install
 
 ```bash
-# Clone this repo
 git clone <repo-url> ~/dotfiles
 
-# Symlink configs (backup existing ones first!)
 ln -sf ~/dotfiles/.config/swaylock ~/.config/swaylock
 ln -sf ~/dotfiles/.config/wlogout ~/.config/wlogout
 ln -sf ~/dotfiles/.config/niri ~/.config/niri
 ln -sf ~/dotfiles/.config/fastfetch ~/.config/fastfetch
 
-# Set wallpaper
 cp ~/dotfiles/wallpapers/wallpaper.jpg ~/.local/share/wallpapers/
 ```
 
