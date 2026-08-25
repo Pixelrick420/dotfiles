@@ -55,10 +55,10 @@ Without this, shaders default to GLSL 1.10 which doesn't support bitwise operati
 ```bash
 git clone <repo-url> ~/dotfiles
 
-ln -sf ~/dotfiles/.config/swaylock ~/.config/swaylock
-ln -sf ~/dotfiles/.config/wlogout ~/.config/wlogout
-ln -sf ~/dotfiles/.config/niri ~/.config/niri
-ln -sf ~/dotfiles/.config/fastfetch ~/.config/fastfetch
+ln -sf ~/dotfiles/swaylock ~/.config/swaylock
+ln -sf ~/dotfiles/wlogout ~/.config/wlogout
+ln -sf ~/dotfiles/niri ~/.config/niri
+ln -sf ~/dotfiles/fastfetch ~/.config/fastfetch
 
 cp ~/dotfiles/wallpapers/wallpaper.jpg ~/.local/share/wallpapers/
 ```
