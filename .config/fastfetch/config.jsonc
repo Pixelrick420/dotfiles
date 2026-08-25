@@ -57,7 +57,7 @@
             "type": "command",
             "key": "│ OS     ",
             "keyColor": "38;5;114",
-            "text": ". /etc/os-release && printf '%s\n' \"$PRETTY_NAME\" | sed 's/ (Workstation Edition)//'"
+            "text": ". /etc/os-release && printf '%s\\n' \"$PRETTY_NAME\""
         },
         {
             "type": "kernel",
