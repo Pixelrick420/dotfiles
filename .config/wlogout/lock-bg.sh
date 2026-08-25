@@ -1,2 +1,2 @@
 #!/bin/sh
-shaderbg '*' $HOME/.config/wlogout/marching-squares.frag
+shaderbg '*' $HOME/.config/wlogout/waves.frag
