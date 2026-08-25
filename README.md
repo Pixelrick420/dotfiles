@@ -65,7 +65,7 @@ Without this, shaders default to GLSL 1.10 which doesn't support bitwise operati
 ## Install
 
 ```bash
-git clone <repo-url> ~/dotfiles
+git clone https://github.com/Pixelrick420/dotfiles.git ~/dotfiles
 
 ln -sf ~/dotfiles/swaylock ~/.config/swaylock
 ln -sf ~/dotfiles/wlogout ~/.config/wlogout
@@ -80,4 +80,4 @@ cp ~/dotfiles/wallpapers/wallpaper.jpg ~/.local/share/wallpapers/
 - **niri** - Window manager
 - **wlogout** - Logout menu
 - **swaylock-plugin** + **shaderbg** - Animated lock screen
-- **fastfetch** - System info (optional)
+- **fastfetch** - System info 
