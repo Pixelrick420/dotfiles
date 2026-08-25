@@ -12,7 +12,7 @@ My Wayland (Niri) dotfiles.
 
 ## Lock screen animation
 
-The lock screen uses a custom GLSL shader (`marching-squares.frag`) rendered by `shaderbg`. This requires:
+The lock screen uses a custom GLSL shader (`waves.frag`) rendered by `shaderbg`. This requires:
 
 1. **swaylock-plugin** — Build from source:
    ```bash
