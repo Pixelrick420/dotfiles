@@ -12,6 +12,14 @@ My Wayland (Niri) dotfiles.
 
 ## Screenshots
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e81e41c6-6008-4c8c-9a90-2a5dbc6c53ff" />
+
+<img width="1920" height="1036" alt="image" src="https://github.com/user-attachments/assets/c0006b1d-47c2-4fcf-8fbc-8edb2903701d" />
+
+<img width="948" height="1013" alt="image" src="https://github.com/user-attachments/assets/0e3bc385-5b1f-4744-9c4e-b55d42a9d890" />
+
+<img width="1920" height="1079" alt="image" src="https://github.com/user-attachments/assets/3dd4feb7-e3d2-4d1a-bb6d-1d84e3f3d46d" />
+
 
 
 ## Lock screen animation
