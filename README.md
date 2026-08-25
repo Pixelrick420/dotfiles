@@ -4,17 +4,21 @@ My Wayland (Niri) dotfiles.
 
 ## What's included
 
-- **swaylock** — Lock screen config
-- **wlogout** — Logout menu with animated GLSL lock screen background
-- **niri** — Window manager config with DMS theme
-- **fastfetch** — System info display
-- **wallpapers** — Current wallpaper
+- **swaylock** - Lock screen config
+- **wlogout** - Logout menu with animated GLSL lock screen background
+- **niri** - Window manager config with DMS theme
+- **fastfetch** - System info display
+- **wallpapers** - Current wallpaper
+
+## Screenshots
+
+<!-- Add your screenshots here -->
 
 ## Lock screen animation
 
 The lock screen uses a custom GLSL shader (`waves.frag`) rendered by `shaderbg`. This requires:
 
-1. **swaylock-plugin** — Build from source:
+1. **swaylock-plugin** - Build from source:
    ```bash
    git clone https://github.com/CaseyBullock/swaylock-plugin
    cd swaylock-plugin
@@ -24,7 +28,7 @@ The lock screen uses a custom GLSL shader (`waves.frag`) rendered by `shaderbg`.
    sudo chmod u+s /usr/local/bin/swaylock-plugin
    ```
 
-2. **shaderbg** (mstoeckl version) — Build from source:
+2. **shaderbg** (mstoeckl version) - Build from source:
    ```bash
    sudo dnf install wayland-devel mesa-libEGL-devel meson ninja-build  # Fedora
    # or: sudo apt install wayland-dev libegl-dev meson ninja-build     # Ubuntu
@@ -65,7 +69,7 @@ cp ~/dotfiles/wallpapers/wallpaper.jpg ~/.local/share/wallpapers/
 
 ## Dependencies
 
-- **niri** — Window manager
-- **wlogout** — Logout menu
-- **swaylock-plugin** + **shaderbg** — Animated lock screen
-- **fastfetch** — System info (optional)
+- **niri** - Window manager
+- **wlogout** - Logout menu
+- **swaylock-plugin** + **shaderbg** - Animated lock screen
+- **fastfetch** - System info (optional)
