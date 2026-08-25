@@ -1,0 +1,123 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "type": "file",
+        "source": "~/.config/fastfetch/ascii.txt",
+	"color": {
+	    "1": "#fb1525"
+	},
+        "padding": {
+            "top": 1,
+            "left": 0
+        }
+    },
+    "display": {
+        "separator": ""
+    },
+    "modules": [
+        "break",
+        {
+            "type": "custom",
+            "format": "┌────────────── Hardware ──────────────┐"
+        },
+        {
+            "type": "command",
+            "key": "│ CPU    ",
+            "keyColor": "38;5;81",
+            "text": "lscpu | awk -F: '/Model name/ {gsub(/^ +/,\"\",$2); gsub(/Intel\\(R\\) /,\"\",$2); gsub(/Core\\(TM\\) /,\"\",$2); print $2}'"
+        },
+        {
+            "type": "command",
+            "key": "│ GPU    ",
+            "keyColor": "38;5;81",
+            "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch-gpu-name.txt 2>/dev/null || echo 'Unknown'"
+        },
+        {
+            "type": "memory",
+            "key": "│ RAM    ",
+            "keyColor": "38;5;81"
+        },
+        {
+            "type": "command",
+            "key": "│ Disk   ",
+            "keyColor": "38;5;81",
+            "text": "df -h --output=used,size / | tail -1 | awk '{print $1 \" / \" $2}'"
+        },
+        {
+            "type": "custom",
+            "format": "└──────────────────────────────────────┘"
+        },
+
+        "break",
+        {
+            "type": "custom",
+            "format": "┌────────────── Software ──────────────┐"
+        },
+        {
+            "type": "command",
+            "key": "│ OS     ",
+            "keyColor": "38;5;114",
+            "text": ". /etc/os-release && printf '%s\n' \"$PRETTY_NAME\" | sed 's/ (Workstation Edition)//'"
+        },
+        {
+            "type": "kernel",
+            "key": "│ Kernel ",
+            "keyColor": "38;5;114"
+        },
+        {
+            "type": "de",
+            "key": "│ DE     ",
+            "keyColor": "38;5;114"
+        },
+        {
+            "type": "wm",
+            "key": "│ WM     ",
+            "keyColor": "38;5;114"
+        },
+        {
+            "type": "packages",
+            "key": "│ PKGs   ",
+            "keyColor": "38;5;114"
+        },
+        {
+            "type": "shell",
+            "key": "│ Shell  ",
+            "keyColor": "38;5;114"
+        },
+        {
+            "type": "terminal",
+            "key": "│ Term   ",
+            "keyColor": "38;5;114"
+        },
+        {
+            "type": "custom",
+            "format": "└──────────────────────────────────────┘"
+        },
+
+        "break",
+        {
+            "type": "custom",
+            "format": "┌─────────────── Uptime ───────────────┐"
+        },
+        {
+            "type": "uptime",
+            "key": "│ Uptime ",
+            "keyColor": "38;5;177"
+        },
+        {
+            "type": "command",
+            "key": "│ OS Age ",
+            "keyColor": "38;5;177",
+            "text": "birth=$(stat -c %Y /var/log/dnf.log 2>/dev/null || stat -c %Y /var/log/apt/history.log 2>/dev/null || stat -c %Y /var/log/pacman.log 2>/dev/null || stat -c %Y /); now=$(date +%s); echo $(( (now - birth) / 86400 )) days"
+        },
+        {
+            "type": "custom",
+            "format": "└──────────────────────────────────────┘"
+        },
+
+        "break",
+        {
+            "type": "colors"
+        }
+    ]
+}
