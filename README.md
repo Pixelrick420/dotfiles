@@ -12,7 +12,7 @@ My Wayland (Niri) dotfiles.
 
 ## Screenshots
 
-<!-- Add your screenshots here -->
+
 
 ## Lock screen animation
 
