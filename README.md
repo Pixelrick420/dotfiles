@@ -4,6 +4,8 @@ My Wayland (Niri) dotfiles.
 
 ## What's included
 
+- **.zshrc** - Zsh config with Oh My Zsh + Powerlevel10k
+- **p10k.zsh** - Powerlevel10k prompt configuration
 - **swaylock** - Lock screen config
 - **wlogout** - Logout menu with animated GLSL lock screen background
 - **niri** - Window manager config with DMS theme
@@ -20,13 +22,12 @@ My Wayland (Niri) dotfiles.
 
 <img width="1920" height="1079" alt="image" src="https://github.com/user-attachments/assets/3dd4feb7-e3d2-4d1a-bb6d-1d84e3f3d46d" />
 
-
-
 ## Lock screen animation
 
 The lock screen uses a custom GLSL shader (`waves.frag`) rendered by `shaderbg`. This requires:
 
 1. **swaylock-plugin** - Build from source:
+
    ```bash
    git clone https://github.com/CaseyBullock/swaylock-plugin
    cd swaylock-plugin
@@ -39,9 +40,9 @@ The lock screen uses a custom GLSL shader (`waves.frag`) rendered by `shaderbg`.
 2. **shaderbg** (mstoeckl version) - Build from source:
    ```bash
    sudo dnf install wayland-devel mesa-libEGL-devel meson ninja-build  # Fedora
-   # or: sudo apt install wayland-dev libegl-dev meson ninja-build     # Ubuntu
+   # or: sudo apt install wayland-dev libegl-dev meson ninja-build     # Debian
    # or: sudo pacman -S wayland mesa meson ninja                       # Arch
-   
+
    git clone https://git.sr.ht/~mstoeckl/shaderbg
    cd shaderbg
    # Patch main.c to add #version 130 to frag_prologue (see below)
@@ -64,6 +65,31 @@ Without this, shaders default to GLSL 1.10 which doesn't support bitwise operati
 
 ## Install
 
+### Zsh + Oh My Zsh + Powerlevel10k
+
+```bash
+# Install zsh (if not already installed)
+sudo dnf install zsh    # Fedora
+# or: sudo apt install zsh    # Debian
+# or: sudo pacman -S zsh      # Arch
+
+# Install Oh My Zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Install Powerlevel10k theme
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Install custom plugins
+git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# Symlink configs
+ln -sf ~/dotfiles/.zshrc ~/.zshrc
+ln -sf ~/dotfiles/p10k.zsh ~/.p10k.zsh
+```
+
+### Wayland configs
+
 ```bash
 git clone https://github.com/Pixelrick420/dotfiles.git ~/dotfiles
 
@@ -77,7 +103,12 @@ cp ~/dotfiles/wallpapers/wallpaper.jpg ~/.local/share/wallpapers/
 
 ## Dependencies
 
+- **zsh** - Shell
+- **Oh My Zsh** - Zsh framework
+- **powerlevel10k** - Zsh theme
+- **zsh-autosuggestions** - Command suggestions from history
+- **zsh-syntax-highlighting** - Command syntax highlighting
 - **niri** - Window manager
 - **wlogout** - Logout menu
 - **swaylock-plugin** + **shaderbg** - Animated lock screen
-- **fastfetch** - System info 
+- **fastfetch** - System info
