@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Find an existing kitty window
+window=$(niri msg -j windows | jq -r '
+    .[] |
+    select(.app_id == "kitty") |
+    .id
+' | head -n1)
+
+if [ -n "$window" ]; then
+    niri msg action focus-window --id "$window"
+else
+    kitty &
+fi
