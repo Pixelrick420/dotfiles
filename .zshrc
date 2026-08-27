@@ -1,3 +1,8 @@
+# Auto-start niri on TTY1 login
+if [[ -z "$WAYLAND_DISPLAY" && "$(tty)" == "/dev/tty1" ]] && ! pgrep -x niri > /dev/null; then
+    exec niri-session -l
+fi
+
 # ----------------------------
 # Powerlevel10k Instant Prompt
 # ----------------------------
@@ -40,6 +45,8 @@ setopt NO_PROMPT_CR
 
 # ----------------------------
 # alias
-# ----------------------------
+# ---------------------------
+alias zxc='clear'
+alias clip='wl-copy'
 alias open='xdg-open'
-alias clear='printf "\033[H\033[3J"'
+alias clear='printf "\033[H\033[2J\033[3J"'

@@ -1,0 +1,48 @@
+#!/bin/sh
+# Toggle floating terminal between current workspace and the next one
+# - Kitty on current workspace → move to next workspace (current + 1)
+# - Kitty NOT on current workspace → move to current workspace and focus
+
+APP_ID="floating.kitty"
+
+find_terminal_id() {
+    niri msg -j windows | jq -r --arg app "$APP_ID" '
+        .[] | select(.app_id == $app) | .id
+    ' | head -1
+}
+
+get_focused_workspace_idx() {
+    niri msg -j workspaces | jq -r '
+        .[] | select(.is_focused == true) | .idx
+    '
+}
+
+get_terminal_workspace_idx() {
+    local ws_id
+    ws_id=$(niri msg -j windows | jq -r --arg id "$1" '
+        .[] | select(.id == ($id | tonumber)) | .workspace_id
+    ')
+    niri msg -j workspaces | jq -r --arg id "$ws_id" '
+        .[] | select(.id == ($id | tonumber)) | .idx
+    '
+}
+
+CURRENT_IDX=$(get_focused_workspace_idx)
+WID=$(find_terminal_id)
+
+if [ -z "$WID" ]; then
+    kitty --class="$APP_ID" &
+    exit 0
+fi
+
+TERM_IDX=$(get_terminal_workspace_idx "$WID")
+
+if [ "$TERM_IDX" = "$CURRENT_IDX" ]; then
+    # On current workspace → move to next
+    NEXT_IDX=$(( CURRENT_IDX + 1 ))
+    niri msg action move-window-to-workspace --window-id "$WID" "$NEXT_IDX" --focus false
+else
+    # Not on current → bring it here
+    niri msg action move-window-to-workspace --window-id "$WID" "$CURRENT_IDX"
+    niri msg action focus-window --id "$WID"
+fi

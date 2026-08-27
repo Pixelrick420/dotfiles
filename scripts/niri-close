@@ -1,0 +1,9 @@
+#!/bin/sh
+
+app=$(niri msg -j focused-window | jq -r .app_id)
+
+case "$app" in
+    *)
+        niri msg action close-window
+        ;;
+esac

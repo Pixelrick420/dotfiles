@@ -1,40 +1,57 @@
-spawn-at-startup "swayidle" "-w" 
-spawn-at-startup "dfr-theme-set-bg" "--keep-current"
-spawn-at-startup "mako"
-spawn-at-startup "elephant"
-spawn-at-startup "walker" "--gapplication-service"
-spawn-at-startup "mpd"
-spawn-sh-at-startup "sleep 1; exec mpd-mpris"
-spawn-at-startup "dfr-first-boot"
+// Check the wiki for a full description of the configuration:
+//   https://yalter.github.io/niri/Configuration:-Introduction
+// ----------------------------------------------------------------------------
+// Launch at startup
+// ----------------------------------------------------------------------------
+spawn-at-startup "swayidle" "-w"
+// ----------------------------------------------------------------------------
+// Input devices (mouse, trackpad, keyboard, etc.)
+// ----------------------------------------------------------------------------
 input {
     keyboard {
         xkb {
+            // Swap caps lock and escape.
+            // Remap menu key to act as an extra super / mod key.
             options "altwin:menu_win"
         }
+        // A fairly fast repeat rate and delay.
         repeat-delay 200
         repeat-rate 40
     }
     touchpad {
+        // Tapping anywhere registers a left click.
         tap
+        // Inverted scrolling.
         natural-scroll
+        // Disable acceleration.
         accel-profile "flat"
     }
     mouse {
+        // Disable acceleration.
         accel-profile "flat"
+        // Faster scrolling with the mouse wheel.
         scroll-factor 2.0
     }
 }
+// ----------------------------------------------------------------------------
+// Behaviors and aesthetics
+// ----------------------------------------------------------------------------
+// Avoid writing screenshots to disk since they get piped into satty.
 screenshot-path null
 hotkey-overlay {
+    // Avoid auto-showing the important hotkeys menu.
     skip-at-startup
 }
 gestures {
+    // Disable overview when mousing over the top left of primary screen.
     hot-corners {
         off
     }
 }
+// Remove window decorations (requires opening and closing each app to change).
 prefer-no-csd
 layout {
+    // Set gaps around windows in logical pixels.
     gaps 8
     default-column-width {
         proportion 0.5
@@ -48,13 +65,16 @@ layout {
         width 1
     }
 }
+// ----------------------------------------------------------------------------
+// Window / layer rules
+// ----------------------------------------------------------------------------
 window-rule {
     match app-id="dev.zed.Zed"
-
     tiled-state true
     geometry-corner-radius 2
     clip-to-geometry true
 }
+// Assorted window rules.
 window-rule {
     match app-id="^Pinentry-gtk$"
     match app-id="^Tk$"
@@ -69,11 +89,11 @@ window-rule {
     open-floating true
 }
 window-rule {
-    match app-id="^dfr\\.floating\\.ghostty$"
+    match app-id="^floating\\.kitty$"
     match app-id="^dfr\\.floating\\.thunar$"
     open-floating true
     default-column-width {
-        proportion 0.33
+        proportion 0.4
     }
     default-window-height {
         proportion 0.5
@@ -89,31 +109,25 @@ window-rule {
     match app-id="^KeePassXC$"
     block-out-from "screencast"
 }
+// ----------------------------------------------------------------------------
+// Key binds
+// ----------------------------------------------------------------------------
 binds {
-    Mod+Grave hotkey-overlay-title="Kitty terminal" {
-        spawn "~/.local/bin/kitty-focus"
-    }
-    Mod+Slash hotkey-overlay-title="Search niri keybinds" {
-        spawn "walker" "--height" "980" "--width" "980" "--provider" "menus:keybinds"
-    }
-    Mod+Shift+Slash hotkey-overlay-title="Search niri actions" {
-        spawn "walker" "--height" "980" "--width" "980" "--provider" "niriactions"
-    }
-    Mod+Ctrl+Slash hotkey-overlay-title="Search Waybar actions" {
-        spawn "walker" "--height" "980" "--width" "800" "--provider" "menus:waybar"
+    // Overview.
+    Mod+Grave repeat=false cooldown-ms=200 hotkey-overlay-title="Terminal (floating)" {
+        spawn-sh "$HOME/.local/bin/floating-terminal-toggle"
     }
     Mod+O repeat=false hotkey-overlay-title="Toggle overview (4-finger swipe)" {
         toggle-overview
     }
-    Mod+Alt+L hotkey-overlay-title="Lock screen" {
+    // System.
+    Mod+L hotkey-overlay-title="Lock screen" {
         spawn "swaylock-plugin" "--command" "$HOME/.config/wlogout/lock-bg.sh"
     }
-    Mod+Shift+Alt+L hotkey-overlay-title="Power off monitors" {
+    Mod+Shift+L hotkey-overlay-title="Power off monitors" {
         power-off-monitors
     }
-    Mod+Ctrl+Shift+Q hotkey-overlay-title="Exit niri session" {
-        quit
-    }
+    // Capture.
     Mod+S hotkey-overlay-title="Screenshot (region)" {
         screenshot
     }
@@ -127,23 +141,13 @@ binds {
         spawn "wlogout" "-b" "3"
     }
     Mod+Shift+P hotkey-overlay-title="Pick color" {
-        spawn-sh "killall hyprpicker || hyprpicker --autocopy --lowercase-hex"
+        spawn-sh "dms ipc call color-picker open"
     }
-    Mod+E hotkey-overlay-title="Cast focused window" {
-        spawn-sh "niri msg action set-dynamic-cast-window --id $(niri msg --json focused-window | jq .id)"
+    // Notifications.
+    Mod+N hotkey-overlay-title="Toggle Notification Center" {
+        spawn "dms" "ipc" "call" "notifications" "toggle"
     }
-    Mod+N hotkey-overlay-title="Show last notification" {
-        spawn "makoctl" "restore"
-    }
-    Mod+Shift+N hotkey-overlay-title="Dismiss last notification" {
-        spawn "makoctl" "dismiss"
-    }
-    Mod+Ctrl+N hotkey-overlay-title="Dismiss all notifications" {
-        spawn "makoctl" "dismiss" "--all"
-    }
-    Mod+Ctrl+Shift+N hotkey-overlay-title="Toggle silencing notifications" {
-        spawn "dfr-toggle-notifications"
-    }
+    // Themes.
     Mod+BackSlash hotkey-overlay-title="Cycle theme's wallpapers" {
         spawn "dfr-theme-set-bg"
     }
@@ -156,6 +160,7 @@ binds {
     Mod+Ctrl+Shift+BackSlash hotkey-overlay-title="Pick theme" {
         spawn "dfr-theme-set" "--menu"
     }
+    // Media keys.
     XF86AudioRaiseVolume allow-when-locked=true hotkey-overlay-title="Raise volume" {
         spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.05+"
     }
@@ -201,62 +206,33 @@ binds {
     XF86Calculator repeat=false hotkey-overlay-title="Calculator" {
         spawn "gnome-calculator"
     }
+    // Launcher.
     Mod+Space {
         spawn "fuzzel"
     }
-    Mod+W repeat=false hotkey-overlay-title="Launcher (windows)" {
-        spawn "walker" "--provider" "windows"
+    Mod+H repeat=false hotkey-overlay-title="Launcher (clipboard)" {
+        spawn "dms" "ipc" "call" "clipboard" "toggle"
     }
-    Mod+V repeat=false hotkey-overlay-title="Launcher (clipboard)" {
-        spawn "walker" "--provider" "clipboard"
+    // Apps.
+    Mod+Shift+T hotkey-overlay-title="Terminal" {
+        spawn "~/.local/bin/kitty-focus"
     }
-    Mod+Alt+H hotkey-overlay-title="System health" {
-        spawn "dfr-launch-or-focus-tui" "monitor"
+    Mod+Shift+F hotkey-overlay-title="File manager" {
+        spawn "nautilus"
     }
-    Mod+Alt+T hotkey-overlay-title="Terminal" {
-        spawn "ghostty"
-    }
-    Mod+Alt+Shift+T hotkey-overlay-title="Terminal (floating)" {
-        spawn "ghostty" "--class=dfr.floating.ghostty"
-    }
-    Mod+Alt+F hotkey-overlay-title="File manager" {
-        spawn "thunar"
-    }
-    Mod+Alt+Shift+F hotkey-overlay-title="File manager (floating)" {
-        spawn "thunar" "--name=dfr.floating.thunar"
-    }
+    // change
     Mod+Alt+N hotkey-overlay-title="Notes" {
         spawn "dfr-launch-or-focus-tui" "notes"
     }
-    Mod+Alt+Shift+N hotkey-overlay-title="Notes (directory)" {
-        spawn-sh "dfr-launch-or-focus-tui ${EDITOR} ${NOTES_DIRECTORY}"
-    }
-    Mod+Alt+P hotkey-overlay-title="Passwords" {
-        spawn "dfr-launch-or-focus" "keepassxc"
-    }
-    Mod+Alt+Shift+P hotkey-overlay-title="Generate random password to clipboard" {
-        spawn "pw"
-    }
-    Mod+Alt+M hotkey-overlay-title="Music" {
+    // add
+    Mod+M hotkey-overlay-title="Music" {
         spawn "dfr-launch-or-focus-tui" "rmpc"
     }
-    Mod+Alt+B hotkey-overlay-title="Browser" {
-        spawn "firefox"
+    Mod+B hotkey-overlay-title="Browser" {
+        spawn "$HOME/Programs/zen.linux-x86_64/zen/zen"
     }
-    Mod+Alt+Shift+B hotkey-overlay-title="Browser (private)" {
-        spawn "firefox" "-private-window"
-    }
-    Mod+Alt+Ctrl+Shift+B hotkey-overlay-title="Browser (isolated profile)" {
-        spawn-sh "firefox -P ${BROWSER_ISOLATED_PROFILE:-isolated}"
-    }
-    Mod+Ctrl+Shift+Equal hotkey-overlay-title="Increase focused monitor scale" {
-        spawn "output-scale" "+"
-    }
-    Mod+Ctrl+Shift+Minus hotkey-overlay-title="Decrease focused monitor scale" {
-        spawn "output-scale" "-"
-    }
-    Mod+Ctrl+Shift+0 hotkey-overlay-title="Reset focused monitor scale" {
-        spawn "output-scale" "1.0"
+    Mod+Shift+B hotkey-overlay-title="Browser (private)" {
+        spawn "~/Programs/zen.linux-x86_64/zen/zen" "-private-window"
     }
     Mod+Q repeat=false hotkey-overlay-title="Close window" {
         spawn "~/.local/bin/niri-close"
@@ -267,38 +243,18 @@ binds {
     Mod+C hotkey-overlay-title="Center column" {
         center-column
     }
-    Mod+Ctrl+C hotkey-overlay-title="Center all visible columns" {
-        center-visible-columns
-    }
     Mod+Z hotkey-overlay-title="Toggle floating window" {
         toggle-window-floating
     }
     Mod+Ctrl+Z hotkey-overlay-title="Switch focus between floating and tiling" {
         switch-focus-between-floating-and-tiling
     }
-    Mod+T hotkey-overlay-title="Toggle tabbed column" {
-        toggle-column-tabbed-display
-    }
-    Mod+BracketLeft hotkey-overlay-title="Move focused window in and out of column to the left" {
-        consume-or-expel-window-left
-    }
-    Mod+BracketRight hotkey-overlay-title="Move focused window in and out of column to the right" {
-        consume-or-expel-window-right
-    }
+    // Window and column sizes.
     Mod+F hotkey-overlay-title="Maximize column" {
         maximize-column
     }
     Mod+Return hotkey-overlay-title="Toggle fullscreen" {
         fullscreen-window
-    }
-    Mod+Ctrl+F hotkey-overlay-title="Fill empty column space" {
-        expand-column-to-available-width
-    }
-    Mod+R hotkey-overlay-title="Cycle preset widths" {
-        switch-preset-column-width
-    }
-    Mod+Shift+R hotkey-overlay-title="Cycle preset heights" {
-        switch-preset-window-height
     }
     Mod+Ctrl+R hotkey-overlay-title="Reset window height" {
         reset-window-height
@@ -309,85 +265,38 @@ binds {
     Mod+Comma hotkey-overlay-title="Decrease column width" {
         set-column-width "-5%"
     }
-    Mod+Shift+Equal hotkey-overlay-title="Increase window height" {
-        set-window-height "+10%"
-    }
-    Mod+Shift+Minus hotkey-overlay-title="Decrease window height" {
-        set-window-height "-10%"
-    }
+    // Window and column movement.
     Mod+I hotkey-overlay-title="Focus previously focused window" {
         focus-window-previous
     }
     Mod+Left hotkey-overlay-title="Focus column left" {
         focus-column-left
     }
-    Mod+Down hotkey-overlay-title="Focus column down" {
-        focus-window-down
-    }
-    Mod+Up hotkey-overlay-title="Focus column up" {
-        focus-window-up
-    }
     Mod+Right hotkey-overlay-title="Focus column right" {
-        focus-column-right
-    }
-    Mod+H hotkey-overlay-title="Focus column left" {
-        focus-column-left
-    }
-    Mod+J hotkey-overlay-title="Focus column down" {
-        focus-window-down
-    }
-    Mod+K hotkey-overlay-title="Focus column up" {
-        focus-window-up
-    }
-    Mod+L hotkey-overlay-title="Focus column down" {
         focus-column-right
     }
     Mod+Shift+Left hotkey-overlay-title="Move column left" {
         move-column-left
     }
-    Mod+Shift+Down hotkey-overlay-title="Move column down" {
-        move-window-down
-    }
-    Mod+Shift+Up hotkey-overlay-title="Move column up" {
-        move-window-up
-    }
     Mod+Shift+Right hotkey-overlay-title="Move column right" {
         move-column-right
     }
-    Mod+Ctrl+H hotkey-overlay-title="Move column left" {
-        move-column-left
-    }
-    Mod+Ctrl+J hotkey-overlay-title="Move column down" {
-        move-window-down
-    }
-    Mod+Ctrl+K hotkey-overlay-title="Move column up" {
+    Mod+Shift+Up hotkey-overlay-title="Move window up" {
         move-window-up
     }
-    Mod+Ctrl+L hotkey-overlay-title="Move column down" {
-        move-column-right
+    Mod+Shift+Down hotkey-overlay-title="Move window down" {
+        move-window-down
     }
-    Mod+G hotkey-overlay-title="Focus first column" {
+    Mod+BracketLeft hotkey-overlay-title="Focus first column" {
         focus-column-first
     }
-    Mod+SemiColon hotkey-overlay-title="Focus last column" {
+    Mod+BracketRight hotkey-overlay-title="Focus last column" {
         focus-column-last
     }
-    Mod+Ctrl+G hotkey-overlay-title="Move column to first" {
+    Mod+Shift+BracketLeft hotkey-overlay-title="Move column to first" {
         move-column-to-first
     }
-    Mod+Ctrl+SemiColon hotkey-overlay-title="Move column to last" {
-        move-column-to-last
-    }
-    Mod+Home hotkey-overlay-title="Focus first column" {
-        focus-column-first
-    }
-    Mod+End hotkey-overlay-title="Focus last column" {
-        focus-column-last
-    }
-    Mod+Ctrl+Home hotkey-overlay-title="Move column to first" {
-        move-column-to-first
-    }
-    Mod+Ctrl+End hotkey-overlay-title="Move column to last" {
+    Mod+Shift+BracketRight hotkey-overlay-title="Move column to last" {
         move-column-to-last
     }
     Mod+WheelScrollDown hotkey-overlay-title="Focus column right" {
@@ -396,24 +305,13 @@ binds {
     Mod+WheelScrollUp hotkey-overlay-title="Focus column left" {
         focus-column-left
     }
-    Mod+Ctrl+WheelScrollDown hotkey-overlay-title="Move column right" {
+    Mod+Shift+WheelScrollDown hotkey-overlay-title="Move column right" {
         move-column-right
     }
-    Mod+Ctrl+WheelScrollUp hotkey-overlay-title="Move column left" {
+    Mod+Shift+WheelScrollUp hotkey-overlay-title="Move column left" {
         move-column-left
     }
-    Mod+WheelScrollRight hotkey-overlay-title="Focus column right" {
-        focus-column-right
-    }
-    Mod+WheelScrollLeft hotkey-overlay-title="Focus column left" {
-        focus-column-left
-    }
-    Mod+Ctrl+WheelScrollRight hotkey-overlay-title="Move column right" {
-        move-column-right
-    }
-    Mod+Ctrl+WheelScrollLeft hotkey-overlay-title="Move column left" {
-        move-column-left
-    }
+    // Multiple monitor window and column movement.
     Mod+Ctrl+Shift+Left hotkey-overlay-title="Move column to left monitor" {
         move-column-to-monitor-left
     }
@@ -450,10 +348,11 @@ binds {
     Mod+Ctrl+Shift+MouseForward hotkey-overlay-title="Move column to right monitor" {
         move-column-to-monitor-right
     }
-    Mod+Shift+WheelScrollDown cooldown-ms=150 hotkey-overlay-title="Focus next workspace" {
+    // Workspaces.
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 hotkey-overlay-title="Focus next workspace" {
         focus-workspace-down
     }
-    Mod+Shift+WheelScrollUp cooldown-ms=150 hotkey-overlay-title="Focus previous workspace" {
+    Mod+Ctrl+WheelScrollUp cooldown-ms=150 hotkey-overlay-title="Focus previous workspace" {
         focus-workspace-up
     }
     Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=150 hotkey-overlay-title="Move column to next workspace" {
@@ -461,42 +360,6 @@ binds {
     }
     Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=150 hotkey-overlay-title="Move column to previous workspace" {
         move-column-to-workspace-up
-    }
-    Mod+D hotkey-overlay-title="Focus next workspace" {
-        focus-workspace-down
-    }
-    Mod+U hotkey-overlay-title="Focus previous workspace" {
-        focus-workspace-up
-    }
-    Mod+Page_Down hotkey-overlay-title="Focus next workspace" {
-        focus-workspace-down
-    }
-    Mod+Page_Up hotkey-overlay-title="Focus previous workspace" {
-        focus-workspace-up
-    }
-    Mod+Ctrl+D hotkey-overlay-title="Move column to next workspace" {
-        move-column-to-workspace-down
-    }
-    Mod+Ctrl+U hotkey-overlay-title="Move column to previous workspace" {
-        move-column-to-workspace-up
-    }
-    Mod+Ctrl+Page_Down hotkey-overlay-title="Move column to next workspace" {
-        move-column-to-workspace-down
-    }
-    Mod+Ctrl+Page_Up hotkey-overlay-title="Move column to previous workspace" {
-        move-column-to-workspace-up
-    }
-    Mod+Shift+D hotkey-overlay-title="Move workspace down" {
-        move-workspace-down
-    }
-    Mod+Shift+U hotkey-overlay-title="Move workspace up" {
-        move-workspace-up
-    }
-    Mod+Shift+Page_Down hotkey-overlay-title="Move workspace down" {
-        move-workspace-down
-    }
-    Mod+Shift+Page_Up hotkey-overlay-title="Move workspace up" {
-        move-workspace-up
     }
     Mod+1 hotkey-overlay-title="Focus workspace (1-9)" {
         focus-workspace 1
@@ -579,8 +442,15 @@ binds {
     Mod+Ctrl+9 {
         move-column-to-workspace 9
     }
+    // Apps such as remote-desktop clients and software KVM switches may request
+    // that niri stops processing the keyboard shortcuts defined here so they
+    // may, for example, forward the key presses as-is to a remote machine.
+    // It's a good idea to bind an escape hatch to toggle the inhibitor, so a
+    // buggy application can't hold your session hostage.
+    //
+    // allow-inhibiting=false can be applied to other binds as well, which
+    // ensures niri always processes them, even when an inhibitor is active.
     Mod+Escape allow-inhibiting=false hotkey-overlay-title="Always process even with inhibitor" {
         toggle-keyboard-shortcuts-inhibit
     }
 }
-
