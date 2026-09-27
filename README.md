@@ -5,7 +5,7 @@ Wayland dotfiles for Niri window manager.
 ## Contents
 
 - `.zshrc` - Zsh config with Oh My Zsh and Powerlevel10k
-- `p10k.zsh` - Powerlevel10k prompt settings
+- `.p10k.zsh` - Powerlevel10k prompt settings
 - `niri/` - Niri window manager config with DMS theme
 - `swaylock/` - Lock screen colors
 - `wlogout/` - Logout menu with animated GLSL lock screen background
@@ -25,15 +25,16 @@ Wayland dotfiles for Niri window manager.
 
 ## Scripts
 
-The `scripts/` directory contains helper scripts for Niri. Install them to `~/.local/bin/`:
+The `scripts/` directory contains helper scripts for Niri. Symlink them into `~/.local/bin/`:
 
 - `floating-terminal-toggle` - Toggle a floating Kitty terminal between workspaces
 - `kitty-focus` - Focus an existing Kitty window, or launch a new one
 - `niri-close` - Close the focused window
 
 ```bash
-cp scripts/* ~/.local/bin/
-chmod +x ~/.local/bin/*
+for s in floating-terminal-toggle kitty-focus niri-close; do
+  ln -sf ~/Code/dotfiles/scripts/$s ~/.local/bin/$s
+done
 ```
 
 ## Lock screen animation
@@ -99,21 +100,22 @@ git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTO
 git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 # Link configs
-ln -sf ~/dotfiles/.zshrc ~/.zshrc
-ln -sf ~/dotfiles/p10k.zsh ~/.p10k.zsh
+cp ~/Code/dotfiles/.zshrc ~/.zshrc
+ln -sf ~/Code/dotfiles/.p10k.zsh ~/.p10k.zsh
 ```
 
 ### Wayland configs
 
 ```bash
-git clone https://github.com/pixelrick420/dotfiles.git ~/dotfiles
+git clone https://github.com/pixelrick420/dotfiles.git ~/Code/dotfiles
 
-ln -sf ~/dotfiles/swaylock ~/.config/swaylock
-ln -sf ~/dotfiles/wlogout ~/.config/wlogout
-ln -sf ~/dotfiles/niri ~/.config/niri
-ln -sf ~/dotfiles/fastfetch ~/.config/fastfetch
+ln -sf ~/Code/dotfiles/swaylock ~/.config/swaylock
+ln -sf ~/Code/dotfiles/wlogout ~/.config/wlogout
+ln -sf ~/Code/dotfiles/niri ~/.config/niri
+ln -sf ~/Code/dotfiles/fastfetch ~/.config/fastfetch
 
-cp ~/dotfiles/wallpapers/wallpaper.jpg ~/.local/share/wallpapers/
+mkdir -p ~/.local/share/wallpapers
+cp ~/Code/dotfiles/wallpapers/* ~/.local/share/wallpapers/
 ```
 
 ## Dependencies

@@ -4,13 +4,13 @@
 // Launch at startup
 // ----------------------------------------------------------------------------
 spawn-at-startup "swayidle" "-w"
+spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
 // ----------------------------------------------------------------------------
 // Input devices (mouse, trackpad, keyboard, etc.)
 // ----------------------------------------------------------------------------
 input {
     keyboard {
         xkb {
-            // Swap caps lock and escape.
             // Remap menu key to act as an extra super / mod key.
             options "altwin:menu_win"
         }
@@ -74,7 +74,6 @@ window-rule {
     geometry-corner-radius 2
     clip-to-geometry true
 }
-// Assorted window rules.
 window-rule {
     match app-id="^Pinentry-gtk$"
     match app-id="^Tk$"
@@ -113,7 +112,6 @@ window-rule {
 // Key binds
 // ----------------------------------------------------------------------------
 binds {
-    // Overview.
     Mod+Grave repeat=false cooldown-ms=200 hotkey-overlay-title="Terminal (floating)" {
         spawn-sh "$HOME/.local/bin/floating-terminal-toggle"
     }
@@ -138,7 +136,7 @@ binds {
         screenshot-screen
     }
     Mod+P {
-        spawn "wlogout" "-b" "3"
+        spawn "wlogout" "-b" "2"
     }
     Mod+Shift+P hotkey-overlay-title="Pick color" {
         spawn-sh "dms ipc call color-picker open"
@@ -210,6 +208,9 @@ binds {
     Mod+Space {
         spawn "fuzzel"
     }
+    Mod+R hotkey-overlay-title="Cycle preset widths" {
+        switch-preset-column-width
+    }
     Mod+H repeat=false hotkey-overlay-title="Launcher (clipboard)" {
         spawn "dms" "ipc" "call" "clipboard" "toggle"
     }
@@ -220,16 +221,14 @@ binds {
     Mod+Shift+F hotkey-overlay-title="File manager" {
         spawn "nautilus"
     }
-    // change
     Mod+Alt+N hotkey-overlay-title="Notes" {
         spawn "dfr-launch-or-focus-tui" "notes"
     }
-    // add
     Mod+M hotkey-overlay-title="Music" {
         spawn "dfr-launch-or-focus-tui" "rmpc"
     }
     Mod+B hotkey-overlay-title="Browser" {
-        spawn "$HOME/Programs/zen.linux-x86_64/zen/zen"
+        spawn "~/Programs/zen.linux-x86_64/zen/zen"
     }
     Mod+Shift+B hotkey-overlay-title="Browser (private)" {
         spawn "~/Programs/zen.linux-x86_64/zen/zen" "-private-window"
@@ -454,3 +453,4 @@ binds {
         toggle-keyboard-shortcuts-inhibit
     }
 }
+

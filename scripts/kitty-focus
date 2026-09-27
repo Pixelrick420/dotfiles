@@ -12,3 +12,4 @@ if [ -n "$window" ]; then
 else
     kitty &
 fi
+

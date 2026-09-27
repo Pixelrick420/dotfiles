@@ -2,9 +2,9 @@
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
     "logo": {
         "type": "file",
-        "source": "~/.config/fastfetch/ascii.txt",
+        "source": "$HOME/.config/fastfetch/ascii.txt",
 	"color": {
-	    "1": "#f8361f"
+             "1": "#f8361f"
 	},
         "padding": {
             "top": 1,
@@ -27,9 +27,10 @@
             "text": "lscpu | awk -F: '/Model name/ {gsub(/^ +/,\"\",$2); gsub(/Intel\\(R\\) /,\"\",$2); gsub(/Core\\(TM\\) /,\"\",$2); print $2}'"
         },
         {
-            "type": "gpu",
+            "type": "command",
             "key": "│ GPU    ",
-            "keyColor": "38;5;81"
+            "keyColor": "38;5;81",
+            "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch-gpu-name.txt 2>/dev/null || echo 'Unknown'"
         },
         {
             "type": "memory",
@@ -56,7 +57,7 @@
             "type": "command",
             "key": "│ OS     ",
             "keyColor": "38;5;114",
-            "text": ". /etc/os-release && printf '%s\\n' \"$PRETTY_NAME\""
+            "text": ". /etc/os-release && printf '%s\n' \"$PRETTY_NAME\" | sed 's/ (Workstation Edition)//'"
         },
         {
             "type": "kernel",
