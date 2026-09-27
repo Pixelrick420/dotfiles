@@ -1,52 +1,64 @@
-window {
-    background-color: rgba(24, 26, 32, 0.85);
-    border: none;
+/* Catppuccin Mocha — matched to ~/.config/swaylock/config
+   panel    #181825  · unselected #1e1e2e (color=) · selected #000000
+   ring     #89b4fa (ring-color=) · icons #f5c2e7 (key-hl-color=) */
+
+* {
+    background-image: none;
     box-shadow: none;
+}
+
+window {
+    background-color: rgba(24, 24, 39, 0.85);
+    border: none;
     animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 grid {
-    margin: 150px;
+    margin: 200px 350px;
 }
 
 button {
-    background-color: #21252b;
-    color: rgba(0,0,0,0);
-    border: 1px solid #353b45;
+    background-color: #1e1e2e;
+    color: rgba(0, 0, 0, 0);
+    border: 1px solid #45475a;
     border-radius: 40px;
-    box-shadow: none;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 30%;
+    background-size: 12%;
     text-shadow: none;
+    outline-style: none;
 
     margin: 8px;
     font-family: "JetBrains Mono", monospace;
     font-size: 14px;
-    transition: background-color 0.1s ease, border-color 0.1s ease;
+    transition: background-size 0.15s ease, background-color 0.15s ease,
+                border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+/* The label is transparent but still occupies space — this is what
+   gives the button its height. Removing it would shrink the buttons. */
 button > * {
     margin-top: 80px;
     margin-bottom: 80px;
 }
 
-button#lock {
-    background-image: url("./icons/lock.svg");
-}
-
 button#shutdown {
-    background-image: url("./icons/shutdown.svg");
+    background-image: image(url("./icons/shutdown.svg"), url("/usr/share/wlogout/icons/shutdown.png"));
 }
 
 button#reboot {
-    background-image: url("./icons/reboot.svg");
+    background-image: image(url("./icons/reboot.svg"), url("/usr/share/wlogout/icons/reboot.png"));
 }
 
-button:focus {
-    background-color: #2c313c;
-    border: 1px solid #4b5263;
-    box-shadow: none;
+button:focus,
+button:active,
+button:hover {
+    background-color: #000000;
+    border-color: #89b4fa;
+    background-size: 16%;
+    box-shadow: 0 0 0 2px #89b4fa;
+    text-shadow: none;
+    outline-style: none;
 }
 
 @keyframes fadeIn {
